@@ -1,4 +1,7 @@
 ## DSTDSPlayersOnline 
+[![Build Status](https://travis-ci.com/sergioamorim/dstds-players-online.svg?branch=master)](https://travis-ci.com/sergioamorim/dstds-players-online)
+[![codecov](https://codecov.io/gh/sergioamorim/dstds-players-online/branch/master/graph/badge.svg)](https://codecov.io/gh/sergioamorim/dstds-players-online)
+
 This module checks the logs files for players connected to a Dedicated Server 
 of the game Don't Starve Together. 
 
