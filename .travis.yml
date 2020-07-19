@@ -1,0 +1,16 @@
+language: perl
+perl:
+  - "5.30"
+  - "5.28"
+
+before_script:
+  - cpanm --quiet --notest --skip-satisfied Devel::Cover::Report::Codecov
+  - cpanm --quiet --notest --skip-satisfied Mock::Sub
+  - cpanm --quiet --notest --skip-satisfied Test::Exception
+
+script:
+  - perl Makefile.PL
+  - cover -test
+
+after_success:
+  - cover -report codecov

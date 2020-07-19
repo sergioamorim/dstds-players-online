@@ -10,9 +10,10 @@ run `prove t/*` on the root directory of the project to get the tests results;
 if everything passes then it is good to go. Perl is present by default in most 
 Linux distributions and can run in a variety of other systems - you can get 
 more information on [Perl's official page](https://perl.org/).
-Note: you are going to need the module 
-[Mock::Sub](https://github.com/stevieb9/mock-sub) on your Perl installation 
-library to run the tests mentioned above.
+Note: you are going to need the modules 
+[Mock::Sub](https://github.com/stevieb9/mock-sub) and 
+[Test::Exception](https://github.com/Test-More/test-exception) on your Perl 
+installation library to run the tests mentioned above.
 
 ### Instructions 
 The log file names must follow the pattern 
