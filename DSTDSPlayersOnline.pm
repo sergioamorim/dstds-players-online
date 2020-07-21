@@ -1,6 +1,6 @@
 package DSTDSPlayersOnline {
 
-  my $LOGS_DIR = 'tests_data';  # this must be override by the run() subroutine
+  my $LOGS_DIR = 'tests_data';  # this must be overwritten by the write_online_players() subroutine
 
   use warnings;
   use strict;
@@ -8,12 +8,29 @@ package DSTDSPlayersOnline {
   use Exporter;
   our @ISA = qw( Exporter );
 
-  our @EXPORT = qw(
-    online_players find_players log_file_exists make_log_filepath authenticated_host disconnected_user starting_up
-    file_exists logs_dir_exists remove_player player_index contains_player
+  our @EXPORT = qw( write_online_players online_players );
+
+  our @EXPORT_OK = qw(
+    find_players log_file_exists make_log_filepath authenticated_host disconnected_user is_starting_up is_shutting_down
+    file_exists logs_dir_exists remove_player player_index contains_player logs_dir
   );
 
-  our @EXPORT_OK = qw( logs_dir run );
+  sub write_online_players {
+    my $opts = shift;
+    my $server = $opts->{server};
+    $LOGS_DIR = $opts->{logs_dir};
+
+    unless ( !logs_dir_exists( { logs_dir=>$LOGS_DIR } ) ) {
+      foreach my $player (online_players({ server => $server })) {
+        if (defined($player)) {
+          print "$player\n"
+        }
+      }
+    }
+    else {
+      die "The given logs directory could not be found: $LOGS_DIR";
+    }
+  }
 
   sub online_players {
     my $opts = shift;
@@ -36,18 +53,16 @@ package DSTDSPlayersOnline {
       my $connected_player = authenticated_host( { log_line=>$_ } );
       my $disconnected_player = disconnected_user( { log_line=>$_ } );
 
-      if (starting_up( { log_line=>$_ } )) {
+      if (is_starting_up( { log_line=>$_ } ) || is_shutting_down( { log_line=>$_ } )) {
         @players = ();
       }
-
-      if (
+      elsif (
         defined $connected_player &&
         !contains_player( { player=>$connected_player, players=>\@players } )
       ) {
         push @players, $connected_player;
       }
-
-      if (defined $disconnected_player) {
+      elsif (defined $disconnected_player) {
         @players = remove_player( { player=>$disconnected_player, players=>\@players } );
       }
 
@@ -88,11 +103,18 @@ package DSTDSPlayersOnline {
     return $+{steamid};
   }
 
-  sub starting_up {
+  sub is_starting_up {
     my $opts = shift;
     my $log_line = $opts->{log_line};
 
     return ($log_line =~ m/ Starting Up/);
+  }
+
+  sub is_shutting_down {
+    my $opts = shift;
+    my $log_line = $opts->{log_line};
+
+    return ($log_line =~ m/ \[Shard] Stopping shard mode/);
   }
 
   sub file_exists {
@@ -142,23 +164,6 @@ package DSTDSPlayersOnline {
 
   sub logs_dir {
     return $LOGS_DIR;
-  }
-
-  sub run {
-    my $opts = shift;
-    my $server = $opts->{server};
-    $LOGS_DIR = $opts->{logs_dir};
-
-    unless ( !logs_dir_exists( { logs_dir=>$LOGS_DIR } ) ) {
-      foreach my $player (online_players({ server => $server })) {
-        if (defined($player)) {
-          print "$player\n"
-        }
-      }
-    }
-    else {
-      die "The given logs directory could not be found: $LOGS_DIR";
-    }
   }
 
 }

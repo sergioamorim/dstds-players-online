@@ -7,13 +7,16 @@ use lib "$FindBin::RealBin/..";
 use DSTDSPlayersOnline qw( disconnected_user );
 
 BEGIN {
-  plan(tests => 4);
+  plan(tests => 5);
 }
 
 my $log_line = '[15:00:11]: Received (KU_d4ddm9-w) from TokenPurpose';
 ok !disconnected_user( { log_line=>$log_line } ), "$log_line does not have user disconnection";
 
 $log_line = "[00:05:32]: [Steam] Authenticated host '76561198125299762'";
+ok !disconnected_user( { log_line=>$log_line } ), "$log_line does not have user disconnection";
+
+$log_line = '[00:05:33]: [Shard] Stopping shard mode';
 ok !disconnected_user( { log_line=>$log_line } ), "$log_line does not have user disconnection";
 
 my $steam_id = '76561198012345678';

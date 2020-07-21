@@ -11,5 +11,5 @@ use DSTDSPlayersOnline qw( run );
 my $logs_dir = shift;
 
 foreach(@ARGV) {
-  run( { server=>$_, logs_dir=> $logs_dir} );
+  write_online_players( { server=>$_, logs_dir=> $logs_dir} );
 }

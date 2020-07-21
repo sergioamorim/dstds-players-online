@@ -7,9 +7,11 @@ use lib "$FindBin::RealBin/..";
 use DSTDSPlayersOnline qw( find_players );
 
 BEGIN {
-  plan(tests => 6);
+  plan(tests => 7);
 }
 
+# this set of tests involves integration and various subroutines are not mocked
+# the data for each server tested must be in test_data/dst_server_<server>_screenlog.log
 my $server = 'Caves';
 ok !find_players( { server=>$server } ), "no players online on $server";
 
@@ -29,4 +31,7 @@ $server = 'Test2';
 ok !find_players( { server=>$server } ), "no players online on $server";
 
 $server = 'Test3';
+ok !find_players( { server=>$server } ), "no players online on $server";
+
+$server = 'Test4';
 ok !find_players( { server=>$server } ), "no players online on $server";
