@@ -6,7 +6,7 @@ use warnings FATAL => 'all';
 use FindBin;
 use lib "$FindBin::RealBin/.";
 
-use DSTDSPlayersOnline qw( run );
+use DSTDSPlayersOnline qw( write_online_players );
 
 my $logs_dir = shift;
 
